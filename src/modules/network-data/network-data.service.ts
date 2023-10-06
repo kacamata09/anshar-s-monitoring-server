@@ -1,26 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateNetworkDatumDto } from './dto/create-network-datum.dto';
 import { UpdateNetworkDatumDto } from './dto/update-network-datum.dto';
+import { exec } from 'child_process';
+
+import * as os from 'node-os-utils';
 
 @Injectable()
 export class NetworkDataService {
-  create(createNetworkDatumDto: CreateNetworkDatumDto) {
-    return 'This action adds a new networkDatum';
-  }
+  async getMonitoringServer() {
+    // monitoring
+    const cpu = os.cpu;
+    const cpuUsage = await cpu.usage();
+    const cpuFree = 100 - cpuUsage;
 
-  findAll() {
-    return `This action returns all networkData`;
-  }
+    // format return
+    const formatMonitoring = {
+      cpuUsage,
+      cpuFree,
+    };
 
-  findOne(id: number) {
-    return `This action returns a #${id} networkDatum`;
-  }
-
-  update(id: number, updateNetworkDatumDto: UpdateNetworkDatumDto) {
-    return `This action updates a #${id} networkDatum`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} networkDatum`;
+    return formatMonitoring;
   }
 }
